@@ -18,7 +18,7 @@
 				/>
 			</div>
 		</div>
-		<v-button x-small @click="$emit('update:filters', null)" :disabled="!filters.length > 0">
+		<v-button x-small @click="$emit('update:filters', [])" :disabled="!filters.length > 0">
 			{{ $t('clear_filters') }}
 		</v-button>
 	</div>
