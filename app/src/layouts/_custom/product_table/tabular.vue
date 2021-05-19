@@ -60,7 +60,6 @@
 				</span>
 			</transition>
 		</portal>
-
 		<layout-filters
 			class="filter-form"
 			:filters.sync="_filters"
