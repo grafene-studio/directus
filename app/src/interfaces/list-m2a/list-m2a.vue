@@ -113,6 +113,8 @@
 			:selection="[]"
 			@input="stageSelection"
 			@update:active="selectingFrom = null"
+			:filters="filters"
+			@update:filters="filters = $event"
 		/>
 
 		<drawer-item
@@ -133,7 +135,7 @@
 <script lang="ts">
 import { defineComponent, computed, PropType, ref, watch } from '@vue/composition-api';
 import { useRelationsStore, useCollectionsStore, useFieldsStore } from '@/stores';
-import { Relation, Collection } from '@/types/';
+import { Relation, Collection, Filter } from '@/types/';
 import DrawerCollection from '@/views/private/components/drawer-collection/';
 import DrawerItem from '@/views/private/components/drawer-item/';
 import api from '@/api';
@@ -190,6 +192,9 @@ export default defineComponent({
 
 		watch(props, fetchValues, { immediate: true, deep: true });
 
+		/* CUSTOM */
+		const filters = ref<Filter[]>([]);
+
 		return {
 			previewValues,
 			collections,
@@ -211,6 +216,7 @@ export default defineComponent({
 			hideDragImage,
 			onSort,
 			allowedCollections,
+			filters,
 		};
 
 		function useRelations() {
