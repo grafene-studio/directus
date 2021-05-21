@@ -25,6 +25,19 @@ export default defineComponent({
 
 		const fields = [
 			{
+				name: 'Template',
+				field: 'template',
+				type: 'string',
+				meta: {
+					interface: 'input',
+					width: 'full',
+					options: {
+						placeholder: '{{field}}',
+					},
+				},
+				schema: null,
+			},
+			{
 				name: 'Parent Field',
 				field: 'parentField',
 				type: 'string',
