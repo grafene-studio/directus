@@ -26,7 +26,11 @@
 								/>
 
 								<!-- Dummy render-template to render ">" with the correct styling -->
-								<render-template :collection="relatedCollection.collection" :item="currentItem" template=">" />
+								<render-template
+									:collection="relatedCollection.collection"
+									:item="currentItem"
+									template=">"
+								/>
 							</template>
 							<render-template
 								:collection="relatedCollection.collection"
@@ -38,7 +42,12 @@
 
 					<template #append v-if="!disabled">
 						<template v-if="currentItem">
-							<v-icon name="close" class="deselect" @click.stop="emitValue(null)" v-tooltip="$t('deselect')" />
+							<v-icon
+								name="close"
+								class="deselect"
+								@click.stop="emitValue(null)"
+								v-tooltip="$t('deselect')"
+							/>
 							<v-icon class="expand" :class="{ active }" name="expand_more" />
 						</template>
 						<template v-else>
@@ -143,12 +152,6 @@ export default defineComponent({
 
 		const computedItems = ref<any>(null);
 
-		const nestedDisplay = computed(() => {
-			if (currentItem.value?.parent?.label) return `{{parent.label}} > {{`;
-
-			return null;
-		});
-
 		async function getItems() {
 			const { data } = await api.get(`/_custom/generate-tree-list/${relatedCollection.value.collection}`, {
 				params: {
@@ -172,7 +175,6 @@ export default defineComponent({
 		return {
 			emitValue,
 			computedItems,
-			nestedDisplay,
 			collectionInfo,
 			currentItem,
 			displayTemplate,
