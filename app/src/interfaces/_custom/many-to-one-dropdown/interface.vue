@@ -18,6 +18,16 @@
 				>
 					<template #input v-if="currentItem">
 						<div class="preview">
+							<template v-if="currentItem.parent">
+								<render-template
+									:collection="relatedCollection.collection"
+									:item="currentItem.parent"
+									:template="displayTemplate"
+								/>
+
+								<!-- Dummy render-template to render ">" with the correct styling -->
+								<render-template :collection="relatedCollection.collection" :item="currentItem" template=">" />
+							</template>
 							<render-template
 								:collection="relatedCollection.collection"
 								:item="currentItem"
@@ -73,7 +83,7 @@
 <script lang="ts">
 import api from '@/api';
 import useCollection from '@/composables/use-collection';
-import { defineComponent, computed, ref, toRefs, watch, onMounted } from '@vue/composition-api';
+import { defineComponent, computed, ref, toRefs, watch } from '@vue/composition-api';
 import { useCollectionsStore, useRelationsStore } from '@/stores/';
 import { getFieldsFromTemplate } from '@/utils/get-fields-from-template';
 import { unexpectedError } from '@/utils/unexpected-error';
@@ -133,6 +143,12 @@ export default defineComponent({
 
 		const computedItems = ref<any>(null);
 
+		const nestedDisplay = computed(() => {
+			if (currentItem.value?.parent?.label) return `{{parent.label}} > {{`;
+
+			return null;
+		});
+
 		async function getItems() {
 			const { data } = await api.get(`/_custom/generate-tree-list/${relatedCollection.value.collection}`, {
 				params: {
@@ -156,6 +172,7 @@ export default defineComponent({
 		return {
 			emitValue,
 			computedItems,
+			nestedDisplay,
 			collectionInfo,
 			currentItem,
 			displayTemplate,
@@ -232,8 +249,10 @@ export default defineComponent({
 					fields.push(relatedPrimaryKeyField.value.field);
 				}
 
-				fields.push(props.parentField);
+				fields.push(`${props.parentField}.label,id`);
 				fields.push(props.childrenField);
+
+				console.log(fields);
 
 				try {
 					const endpoint = relatedCollection.value.collection.startsWith('directus_')
@@ -389,7 +408,7 @@ export default defineComponent({
 }
 
 .preview {
-	display: block;
+	display: flex;
 	flex-grow: 1;
 	height: calc(100% - 16px);
 	overflow: hidden;
