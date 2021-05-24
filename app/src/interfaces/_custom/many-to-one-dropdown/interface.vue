@@ -249,7 +249,7 @@ export default defineComponent({
 					fields.push(relatedPrimaryKeyField.value.field);
 				}
 
-				fields.push(`${props.parentField}.label,id`);
+				fields.push(`${props.parentField}.*`);
 				fields.push(props.childrenField);
 
 				console.log(fields);
