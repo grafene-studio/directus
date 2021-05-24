@@ -30,11 +30,15 @@ export async function createCategoryFilter(value: string, field: Field) {
 
 	const uuids = [];
 
+	// We push the value first so we can use it as an alias,
+	// as it will be used to "display" the filter value
+	uuids.push(value);
+
 	for (const key in list) {
 		if (Object.prototype.hasOwnProperty.call(list, key)) {
 			const item = list[key];
 
-			if (item.includes(value)) uuids.push(item);
+			if (item.includes(value) && item !== value) uuids.push(item);
 		}
 	}
 
