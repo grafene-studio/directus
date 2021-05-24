@@ -83,7 +83,8 @@ export default defineComponent({
 		function getFilter(key: Filter['key']) {
 			const filter = props.filters.find((filter) => filter.key === key);
 			if (key === 'category' && filter) {
-				/* Alias the value to the first item of the concatenated string, otherwise it 500s */
+				// Alias the value to the first item of the concatenated string, otherwise it 500s
+				// We assume that the first value is the "display" value we want.
 				const legalValue = filter.value.split(',')[0];
 				return {
 					...filter,
