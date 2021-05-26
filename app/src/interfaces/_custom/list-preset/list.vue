@@ -2,7 +2,7 @@
 	<div>
 		<div v-if="presets" class="preset-form">
 			<template v-for="preset in presets">
-				<v-button xSmall secondary :key="preset.key" @click="addPreset(preset.preset)">
+				<v-button class="preset-button" xSmall secondary :key="preset.key" @click="addPreset(preset.preset)">
 					{{ preset.label }}
 				</v-button>
 			</template>
@@ -73,5 +73,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 .preset-form {
 	margin-bottom: 12px;
+
+	.preset-button {
+		margin-right: 6px;
+	}
 }
 </style>
