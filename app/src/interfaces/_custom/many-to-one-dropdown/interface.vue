@@ -26,11 +26,7 @@
 								/>
 
 								<!-- Dummy render-template to render ">" with the correct styling -->
-								<render-template
-									:collection="relatedCollection.collection"
-									:item="currentItem"
-									template=">"
-								/>
+								<render-template :collection="relatedCollection.collection" :item="currentItem" template=">" />
 							</template>
 							<render-template
 								:collection="relatedCollection.collection"
@@ -42,12 +38,7 @@
 
 					<template #append v-if="!disabled">
 						<template v-if="currentItem">
-							<v-icon
-								name="close"
-								class="deselect"
-								@click.stop="emitValue(null)"
-								v-tooltip="$t('deselect')"
-							/>
+							<v-icon name="close" class="deselect" @click.stop="emitValue(null)" v-tooltip="$t('deselect')" />
 							<v-icon class="expand" :class="{ active }" name="expand_more" />
 						</template>
 						<template v-else>
@@ -147,7 +138,6 @@ export default defineComponent({
 		const { totalCount, loading: itemsLoading, fetchItems, items } = useItems();
 
 		const { setCurrent, currentItem, loading: loadingCurrent, currentPrimaryKey } = useCurrent();
-
 		getItems();
 
 		const computedItems = ref<any>(null);
@@ -357,7 +347,7 @@ export default defineComponent({
 			});
 
 			const relatedCollection = computed(() => {
-				return collectionsStore.getCollection(relation.value.one_collection)!;
+				return collectionsStore.getCollection(relation.value.related_collection)!;
 			});
 
 			const { primaryKeyField: relatedPrimaryKeyField } = useCollection(relatedCollection.value.collection);
