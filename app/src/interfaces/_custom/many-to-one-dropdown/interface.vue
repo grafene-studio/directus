@@ -244,8 +244,6 @@ export default defineComponent({
 				fields.push(`${props.parentField}.*`);
 				fields.push(props.childrenField);
 
-				console.log(fields);
-
 				try {
 					const endpoint = relatedCollection.value.collection.startsWith('directus_')
 						? `/${relatedCollection.value.collection.substring(9)}/${props.value}`
