@@ -16,7 +16,7 @@ export function createStatusFilter(value: string) {
 }
 
 export async function createCategoryFilter(value: string, field: Field) {
-	if (field == null) throw Error('Field is null!');
+	console.log(value, field);
 
 	const { relatedCollection } = useRelation(field);
 
@@ -62,7 +62,7 @@ function useRelation(field: Field) {
 
 	const relation = relationsStore.getRelationsForField(field.collection, field.field)?.[0];
 
-	const relatedCollection = collectionsStore.getCollection(relation.one_collection)!;
+	const relatedCollection = collectionsStore.getCollection(relation.related_collection)!;
 
 	const { primaryKeyField: relatedPrimaryKeyField } = useCollection(relatedCollection.collection);
 
