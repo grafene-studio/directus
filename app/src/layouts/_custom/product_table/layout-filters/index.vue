@@ -9,28 +9,50 @@
 					@unset="deleteFilter"
 				/>
 			</div>
-			<div class="field half-right">
+			<div class="field half-left">
 				<filter-field
 					:filter="getFilter('category')"
 					:field="categoryField"
-					@input="_createCategoryFilter($event)"
+					@input="
+						_createDenormalizedFilter($event, categoryField, {
+							key: 'category',
+							field: 'category.id',
+							operator: 'in',
+							value: null,
+						})
+					"
+					@unset="deleteFilter"
+				/>
+			</div>
+			<div class="field half-right">
+				<filter-field
+					:filter="getFilter('origin')"
+					:field="originField"
+					@input="
+						_createDenormalizedFilter($event, originField, {
+							key: 'origin',
+							field: 'origin.id',
+							operator: 'in',
+							value: null,
+						})
+					"
 					@unset="deleteFilter"
 				/>
 			</div>
 		</div>
-		<v-button x-small @click="$emit('update:filters', [])" :disabled="!filters.length > 0">
+		<v-button x-small @click="$emit('update:filters', [])" :disabled="!(filters.length > 0)">
 			{{ $t('clear_filters') }}
 		</v-button>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType } from '@vue/composition-api';
+import { defineComponent, computed, PropType, ref } from '@vue/composition-api';
 import { useFieldsStore } from '@/stores/';
 import { Field, Filter } from '@/types';
 
 import FilterField from './filter.vue';
-import { createStatusFilter, createCategoryFilter } from './filters';
+import { createStatusFilter, createDenormalizedFilter } from './filters';
 
 export default defineComponent({
 	components: {
@@ -50,21 +72,32 @@ export default defineComponent({
 		const fieldsStore = useFieldsStore();
 		const fields = computed<Field[]>(() => fieldsStore.getFieldsForCollection(props.collection));
 
-		const statusField = fields.value.find(({ field }: Field) => field === 'status');
-		/* Adds deselectable option to the statusfield */
-		if (statusField?.meta?.options) statusField.meta.options.allowNone = true;
+		const statusField = ref<Field>(null as unknown as Field);
+		const categoryField = ref<Field>(null as unknown as Field);
+		const originField = ref<Field>(null as unknown as Field);
 
-		const categoryField = fields.value.find(({ field }: Field) => field === 'category');
+		fields.value.map((field: Field) => {
+			if (field.field === 'status') statusField.value = field;
+			if (field.field === 'category') categoryField.value = field;
+			if (field.field === 'origin') originField.value = field;
+		});
+
+		if (statusField.value == null || categoryField.value == null || originField.value == null)
+			throw new Error('Filter setup failed!');
+
+		/* Adds deselectable option to the statusfield */
+		if (statusField.value?.meta?.options) statusField.value.meta.options.allowNone = true;
 
 		return {
 			fields,
 			statusField,
 			categoryField,
+			originField,
 			handleFilters,
 			getFilter,
 			deleteFilter,
 			createStatusFilter,
-			_createCategoryFilter,
+			_createDenormalizedFilter,
 		};
 
 		function handleFilters(filter: Filter) {
@@ -82,7 +115,7 @@ export default defineComponent({
 
 		function getFilter(key: Filter['key']) {
 			const filter = props.filters.find((filter) => filter.key === key);
-			if (key === 'category' && filter) {
+			if (filter && (key === 'category' || key === 'origin')) {
 				// Alias the value to the first item of the concatenated string, otherwise it 500s
 				// We assume that the first value is the "display" value we want.
 				const legalValue = filter.value.split(',')[0];
@@ -99,10 +132,11 @@ export default defineComponent({
 			emit('update:filters', [...(removeFilter || [])]);
 		}
 
-		async function _createCategoryFilter(value: string) {
-			const filter = await createCategoryFilter(value, categoryField!);
+		async function _createDenormalizedFilter(value: string, field: Field, filter: Filter) {
+			if (field == null) throw new Error('Field missing!');
+			const result = await createDenormalizedFilter(value, field, filter);
 
-			handleFilters(filter);
+			handleFilters(result);
 		}
 	},
 });
