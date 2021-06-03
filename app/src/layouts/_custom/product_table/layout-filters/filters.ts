@@ -15,9 +15,7 @@ export function createStatusFilter(value: string) {
 	return createFilter(filter);
 }
 
-export async function createCategoryFilter(value: string, field: Field) {
-	console.log(value, field);
-
+export async function createDenormalizedFilter(value: string, field: Field, filter: Filter) {
 	const { relatedCollection } = useRelation(field);
 
 	const { data } = await api.get(`/_custom/generate-tree-list/${relatedCollection.collection}`, {
@@ -42,14 +40,10 @@ export async function createCategoryFilter(value: string, field: Field) {
 		}
 	}
 
-	const filter: Filter = {
-		key: 'category',
-		field: 'category.id',
-		operator: 'in',
+	return createFilter({
+		...filter,
 		value: _.uniq(uuids.flat()).join(','),
-	};
-
-	return createFilter(filter);
+	});
 }
 
 function createFilter(filter: Filter): Filter {
