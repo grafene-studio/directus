@@ -71,6 +71,8 @@
 				</template>
 
 				<template #item-append="{ item }">
+					<!-- ** CUSTOM** Dummy div, otherwise the action bar does not render... -->
+					<div></div>
 					<v-icon
 						small
 						class="no-meta"
