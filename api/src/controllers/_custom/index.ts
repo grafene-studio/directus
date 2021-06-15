@@ -29,7 +29,7 @@ router.get(
 
 		const items = await service.readByQuery(query);
 
-		const { tree, list } = generateTreeList(items, parentField as string, childrenField as string);
+		const { tree, list } = generateTreeList(items, parentField, childrenField);
 
 		const data = { tree, list };
 
