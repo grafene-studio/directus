@@ -57,6 +57,8 @@
 		</template>
 
 		<template #actions>
+			<!-- ** CUSTOM** Dummy div, otherwise the action bar does not render... -->
+			<div></div>
 			<v-dialog v-if="!isNew" v-model="confirmDelete" :disabled="deleteAllowed === false" @esc="confirmDelete = false">
 				<template #activator="{ on }">
 					<v-button
@@ -119,7 +121,6 @@
 					</v-card-actions>
 				</v-card>
 			</v-dialog>
-
 			<v-button
 				rounded
 				icon
@@ -246,9 +247,13 @@ export default defineComponent({
 
 		const revisionsDrawerDetail = ref<Vue | null>(null);
 
-		const { info: collectionInfo, defaults, primaryKeyField, isSingleton, accountabilityScope } = useCollection(
-			collection
-		);
+		const {
+			info: collectionInfo,
+			defaults,
+			primaryKeyField,
+			isSingleton,
+			accountabilityScope,
+		} = useCollection(collection);
 
 		const {
 			isNew,

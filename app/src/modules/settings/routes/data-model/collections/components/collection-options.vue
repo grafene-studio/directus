@@ -2,6 +2,8 @@
 	<div v-if="collection.collection.startsWith('directus_') === false">
 		<v-menu placement="left-start" show-arrow>
 			<template #activator="{ toggle }">
+				<!-- ** CUSTOM** Dummy div, otherwise the action bar does not render... -->
+				<div></div>
 				<v-icon name="more_vert" @click="toggle" class="ctx-toggle" />
 			</template>
 			<v-list>

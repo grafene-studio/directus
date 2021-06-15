@@ -17,8 +17,6 @@ router.get(
 		const parentField = 'parent';
 		const childrenField = 'children';
 
-		console.log(parentField, childrenField);
-
 		const query: Query = {
 			limit: -1,
 		};
