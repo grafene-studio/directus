@@ -2,13 +2,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 declare module '*.vue' {
-	import Vue from 'vue';
-	export default Vue;
-}
-
-declare module '*.svg' {
-	import Vue from 'vue';
-	export default Vue;
+	import { ComponentOptions } from 'vue';
+	const Component: ComponentOptions;
+	export default Component;
 }
 
 declare module '*.md' {
@@ -29,6 +25,30 @@ declare module '*.json' {
 declare module 'jsonlint-mod' {
 	const x: any;
 	export default x;
+}
+
+declare module '@directus-extensions-interface' {
+	import { InterfaceConfig } from '@/interfaces/types';
+	const interfaces: InterfaceConfig[];
+	export default interfaces;
+}
+
+declare module '@directus-extensions-display' {
+	import { DisplayConfig } from '@/displays/types';
+	const displays: DisplayConfig[];
+	export default displays;
+}
+
+declare module '@directus-extensions-layout' {
+	import { LayoutConfig } from '@/layouts/types';
+	const layouts: LayoutConfig[];
+	export default layouts;
+}
+
+declare module '@directus-extensions-module' {
+	import { ModuleConfig } from '@/modules/types';
+	const modules: ModuleConfig[];
+	export default modules;
 }
 
 type Primitive = string | number | boolean | bigint | symbol | undefined | null;

@@ -1,5 +1,5 @@
-import { TranslateResult } from 'vue-i18n';
 import { Column } from 'knex-schema-inspector/dist/types/column';
+import { FilterOperator } from '@directus/shared/types';
 
 type Translations = {
 	language: string;
@@ -39,6 +39,7 @@ export const localTypes = [
 	'm2a',
 	'presentation',
 	'translations',
+	'group',
 ] as const;
 
 export type FieldMeta = {
@@ -56,7 +57,7 @@ export type FieldMeta = {
 	special: string[] | null;
 	translations: null | Translations[];
 	width: Width | null;
-	note: string | TranslateResult | null;
+	note: string | null;
 	system?: true;
 };
 
@@ -69,5 +70,15 @@ export interface FieldRaw {
 }
 
 export interface Field extends FieldRaw {
-	name: string | TranslateResult;
+	name: string;
+	children?: Field[] | null;
 }
+
+export type ValidationError = {
+	code: string;
+	field: string;
+	type: FilterOperator;
+	valid?: number | string | (number | string)[];
+	invalid?: number | string | (number | string)[];
+	substring?: string;
+};
