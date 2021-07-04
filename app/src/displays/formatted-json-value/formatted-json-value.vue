@@ -8,7 +8,8 @@
 
 <script lang="ts">
 import { render } from 'micromustache';
-import { defineComponent, computed } from '@vue/composition-api';
+import { defineComponent, computed } from 'vue';
+
 export default defineComponent({
 	props: {
 		value: {

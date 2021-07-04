@@ -185,6 +185,8 @@ export class AuthenticationService {
 			});
 		}
 
+		await this.knex('directus_users').update({ last_access: new Date() }).where({ id: user.id });
+
 		emitStatus('success');
 
 		if (allowedAttempts !== null) {
@@ -230,6 +232,8 @@ export class AuthenticationService {
 			.update({ token: newRefreshToken, expires: refreshTokenExpiration })
 			.where({ token: refreshToken });
 
+		await this.knex('directus_users').update({ last_access: new Date() }).where({ id: record.id });
+
 		return {
 			accessToken,
 			refreshToken: newRefreshToken,
@@ -248,20 +252,25 @@ export class AuthenticationService {
 	}
 
 	async generateOTPAuthURL(pk: string, secret: string): Promise<string> {
-		const user = await this.knex.select('first_name', 'last_name').from('directus_users').where({ id: pk }).first();
-		const name = `${user.first_name} ${user.last_name}`;
-		return authenticator.keyuri(name, 'Directus', secret);
+		const user = await this.knex.select('email').from('directus_users').where({ id: pk }).first();
+		const project = await this.knex.select('project_name').from('directus_settings').limit(1).first();
+		return authenticator.keyuri(user.email, project?.project_name || 'Directus', secret);
 	}
 
-	async verifyOTP(pk: string, otp: string): Promise<boolean> {
-		const user = await this.knex.select('tfa_secret').from('directus_users').where({ id: pk }).first();
+	async verifyOTP(pk: string, otp: string, secret?: string): Promise<boolean> {
+		let tfaSecret: string;
+		if (!secret) {
+			const user = await this.knex.select('tfa_secret').from('directus_users').where({ id: pk }).first();
 
-		if (!user.tfa_secret) {
-			throw new InvalidPayloadException(`User "${pk}" doesn't have TFA enabled.`);
+			if (!user.tfa_secret) {
+				throw new InvalidPayloadException(`User "${pk}" doesn't have TFA enabled.`);
+			}
+			tfaSecret = user.tfa_secret;
+		} else {
+			tfaSecret = secret;
 		}
 
-		const secret = user.tfa_secret;
-		return authenticator.check(otp, secret);
+		return authenticator.check(otp, tfaSecret);
 	}
 
 	async verifyPassword(pk: string, password: string): Promise<boolean> {
