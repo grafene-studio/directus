@@ -70,7 +70,7 @@
 		<!-- CUSTOM LAYOUT FILTERS -->
 		<layout-filters
 			class="filter-form"
-			:filters.sync="_filters"
+			v-model:filters="_filters"
 			:collection="collection"
 			@update:filters="$emit('update:filters', $event)"
 		/>
@@ -87,7 +87,7 @@
 			:sort="tableSort"
 			:items="items"
 			:loading="loading"
-			:headers.sync="tableHeaders"
+			v-model:headers="tableHeaders"
 			:row-height="tableRowHeight"
 			:server-sort="itemCount === limit || totalPages > 1"
 			:item-key="primaryKeyField.field"
@@ -98,7 +98,7 @@
 			@update:sort="onSortChange"
 			@manual-sort="changeManualSort"
 		>
-			<template v-for="header in tableHeaders" v-slot:[`item.${header.value}`]="{ item }">
+			<template :key="header.value" v-for="header in tableHeaders" v-slot:[`item.${header.value}`]="{ item }">
 				<render-display
 					:key="header.value"
 					:value="item[header.value]"
@@ -157,18 +157,18 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { defineComponent, PropType, ref, computed, inject, toRefs, Ref, watch } from '@vue/composition-api';
+import { defineComponent, PropType, ref, computed, inject, toRefs, Ref, watch } from 'vue';
 
 import { HeaderRaw, Item } from '@/components/v-table/types';
-import { Field, Filter } from '@/types';
-import router from '@/router';
+import { Field } from '@/types';
+import { router } from '@/router';
 import useSync from '@/composables/use-sync';
 import { debounce, clone } from 'lodash';
 import Draggable from 'vuedraggable';
 import ExportSidebarDetail from '@/views/private/components/export-sidebar-detail';
 import useCollection from '@/composables/use-collection';
 import useItems from '@/composables/use-items';
-import i18n from '@/lang';
+import { i18n } from '@/lang';
 import adjustFieldsForDisplays from '@/utils/adjust-fields-for-displays';
 import hideDragImage from '@/utils/hide-drag-image';
 import useShortcut from '@/composables/use-shortcut';
@@ -210,7 +210,7 @@ export default defineComponent({
 			default: () => ({}),
 		},
 		filters: {
-			type: Array as PropType<Filter[]>,
+			type: Array as PropType<any[]>,
 			default: () => [],
 		},
 		searchQuery: {
@@ -263,18 +263,18 @@ export default defineComponent({
 		const showingCount = computed(() => {
 			if ((itemCount.value || 0) < (totalCount.value || 0)) {
 				if (itemCount.value === 1) {
-					return i18n.t('one_filtered_item');
+					return i18n.global.t('one_filtered_item');
 				}
-				return i18n.t('start_end_of_count_filtered_items', {
+				return i18n.global.t('start_end_of_count_filtered_items', {
 					start: i18n.n((+page.value - 1) * limit.value + 1),
 					end: i18n.n(Math.min(page.value * limit.value, itemCount.value || 0)),
 					count: i18n.n(itemCount.value || 0),
 				});
 			}
 			if (itemCount.value === 1) {
-				return i18n.t('one_item');
+				return i18n.global.t('one_item');
 			}
-			return i18n.t('start_end_of_count_items', {
+			return i18n.global.t('start_end_of_count_items', {
 				start: i18n.n((+page.value - 1) * limit.value + 1),
 				end: i18n.n(Math.min(page.value * limit.value, itemCount.value || 0)),
 				count: i18n.n(itemCount.value || 0),
@@ -549,7 +549,7 @@ export default defineComponent({
 					const primaryKey = item[primaryKeyField.value!.field];
 
 					// eslint-disable-next-line @typescript-eslint/no-empty-function
-					router.push(`/collections/${collection.value}/${encodeURIComponent(primaryKey)}`, () => {});
+					router.push(`/collections/${collection.value}/${encodeURIComponent(primaryKey)}`);
 				}
 			}
 
@@ -589,7 +589,7 @@ export default defineComponent({
 	--v-table-sticky-offset-top: var(--layout-offset-top);
 
 	display: contents;
-
+	/* stylelint-disable-next-line */
 	::v-deep > table {
 		min-width: calc(100% - var(--content-padding)) !important;
 		margin-left: var(--content-padding);

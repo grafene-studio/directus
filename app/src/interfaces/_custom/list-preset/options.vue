@@ -18,16 +18,16 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from '@vue/composition-api';
+import { computed, defineComponent } from 'vue';
 import InterfaceListOptions from '@/interfaces/list/options.vue';
-import i18n from '@/lang';
+import { i18n } from '@/lang';
 export default defineComponent({
 	components: {
 		InterfaceListOptions,
 	},
 	props: {
 		value: {
-			type: Object as PropType<any>,
+			type: Object,
 			default: null,
 		},
 	},
@@ -46,7 +46,7 @@ export default defineComponent({
 
 		const presetFields = computed(() => {
 			const key = {
-				name: i18n.tc('key', 1),
+				name: 'key',
 				field: 'key',
 				type: 'string',
 				meta: {
@@ -62,14 +62,14 @@ export default defineComponent({
 				schema: null,
 			};
 			const label = {
-				name: i18n.t('label'),
+				name: i18n.global.t('label'),
 				field: 'label',
 				type: 'string',
 				meta: {
 					interface: 'input',
 					width: 'half',
 					options: {
-						placeholder: i18n.t('label...'),
+						placeholder: i18n.global.t('label...'),
 					},
 				},
 				schema: null,

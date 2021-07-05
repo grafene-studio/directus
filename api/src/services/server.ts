@@ -6,7 +6,7 @@ import os from 'os';
 import { performance } from 'perf_hooks';
 // @ts-ignore
 import { version } from '../../package.json';
-import cache from '../cache';
+import { getCache } from '../cache';
 import getDatabase, { hasDatabaseConnection } from '../database';
 import env from '../env';
 import logger from '../logger';
@@ -14,7 +14,7 @@ import { rateLimiter } from '../middleware/rate-limiter';
 import storage from '../storage';
 import { AbstractServiceOptions, Accountability, SchemaOverview } from '../types';
 import { toArray } from '../utils/to-array';
-import mailer from '../mailer';
+import getMailer from '../mailer';
 import { SettingsService } from './settings';
 
 export class ServerService {
@@ -189,6 +189,8 @@ export class ServerService {
 				return {};
 			}
 
+			const { cache } = getCache();
+
 			const checks: Record<string, HealthCheck[]> = {
 				'cache:responseTime': [
 					{
@@ -316,8 +318,10 @@ export class ServerService {
 				],
 			};
 
+			const mailer = getMailer();
+
 			try {
-				await mailer?.verify();
+				await mailer.verify();
 			} catch (err) {
 				checks['email:connection'][0].status = 'error';
 				checks['email:connection'][0].output = err;

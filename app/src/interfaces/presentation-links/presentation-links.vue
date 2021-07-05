@@ -17,14 +17,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, inject, computed } from '@vue/composition-api';
+import { defineComponent, PropType, ref, inject, computed } from 'vue';
 import { render } from 'micromustache';
 
 type Link = {
 	icon: string;
 	label: string;
 	type: string;
-	url: string;
+	url?: string;
 };
 
 export default defineComponent({
@@ -44,7 +44,7 @@ export default defineComponent({
 		const linksParsed = computed(() => {
 			return props.links.map((link) => ({
 				...link,
-				url: render(link.url, values.value),
+				url: render(link.url ?? '', values.value),
 			}));
 		});
 
@@ -59,13 +59,10 @@ export default defineComponent({
 .presentation-links {
 	display: flex;
 	flex-wrap: wrap;
+	gap: 8px;
 }
 
 .action {
-	& + & {
-		margin-left: 8px;
-	}
-
 	&.info {
 		--v-button-icon-color: var(--white);
 		--v-button-background-color: var(--primary);
