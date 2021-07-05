@@ -577,7 +577,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/mixins/breakpoint';
+// @import '@/styles/mixins/breakpoint';
 
 .layout-tabular {
 	display: contents;
@@ -590,14 +590,14 @@ export default defineComponent({
 
 	display: contents;
 	/* stylelint-disable-next-line */
-	::v-deep > table {
-		min-width: calc(100% - var(--content-padding)) !important;
-		margin-left: var(--content-padding);
+	// ::v-deep > table {
+	// 	min-width: calc(100% - var(--content-padding)) !important;
+	// 	margin-left: var(--content-padding);
 
-		tr {
-			margin-right: var(--content-padding);
-		}
-	}
+	// 	tr {
+	// 		margin-right: var(--content-padding);
+	// 	}
+	// }
 }
 
 .footer {
@@ -656,9 +656,9 @@ export default defineComponent({
 	color: var(--foreground-subdued);
 	white-space: nowrap;
 
-	@include breakpoint(small) {
-		display: inline;
-	}
+	// @include breakpoint(small) {
+	// 	display: inline;
+	// }
 }
 
 .fade-enter-active,
