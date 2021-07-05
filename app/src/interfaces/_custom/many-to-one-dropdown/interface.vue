@@ -388,9 +388,9 @@ export default defineComponent({
 	position: relative;
 
 	/* stylelint-disable-next-line */
-	::v-deep .v-input .append {
-		display: flex;
-	}
+	// ::v-deep .v-input .append {
+	// 	display: flex;
+	// }
 }
 
 .v-skeleton-loader {
