@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<div v-if="presets" class="preset-form">
-			<template v-for="preset in presets">
-				<v-button class="preset-button" xSmall secondary :key="preset.key" @click="addPreset(preset.preset)">
+			<template v-for="preset in presets" :key="preset.key">
+				<v-button class="preset-button" xSmall secondary @click="addPreset(preset.preset)">
 					{{ preset.label }}
 				</v-button>
 			</template>
@@ -12,9 +12,9 @@
 </template>
 
 <script lang="ts">
-import i18n from '@/lang';
+import { i18n } from '@/lang';
 import { Field } from '@/types';
-import { defineComponent, PropType } from '@vue/composition-api';
+import { defineComponent, PropType } from 'vue';
 export default defineComponent({
 	props: {
 		value: {
@@ -35,7 +35,7 @@ export default defineComponent({
 		},
 		addLabel: {
 			type: String,
-			default: i18n.t('create_new'),
+			default: i18n.global.t('create_new'),
 		},
 		limit: {
 			type: Number,
@@ -47,7 +47,7 @@ export default defineComponent({
 		},
 		headerPlaceholder: {
 			type: String,
-			default: i18n.t('empty_item'),
+			default: i18n.global.t('empty_item'),
 		},
 		collection: {
 			type: String,

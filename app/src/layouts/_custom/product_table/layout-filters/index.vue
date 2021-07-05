@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, PropType, ref } from '@vue/composition-api';
+import { defineComponent, computed, PropType, ref } from 'vue';
 import { useFieldsStore } from '@/stores/';
 import { Field, Filter } from '@/types';
 
@@ -144,6 +144,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/styles/mixins/form-grid';
+
 .layout-filters {
 	margin-bottom: 12px;
 	margin-left: 32px;

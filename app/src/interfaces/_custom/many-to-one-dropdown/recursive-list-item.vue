@@ -35,7 +35,7 @@
 	</v-list-group>
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, PropType } from '@vue/composition-api';
+import { computed, defineComponent, PropType } from 'vue';
 
 export default defineComponent({
 	name: 'recursive-list-item',
