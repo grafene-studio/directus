@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from '@vue/composition-api';
+import { defineComponent, computed } from 'vue';
 
 export default defineComponent({
 	props: {
@@ -63,6 +63,7 @@ export default defineComponent({
 	z-index: 2;
 	height: var(--v-list-item-min-height);
 }
+
 .toggle {
 	position: relative;
 

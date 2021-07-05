@@ -83,7 +83,7 @@
 <script lang="ts">
 import api from '@/api';
 import useCollection from '@/composables/use-collection';
-import { defineComponent, computed, ref, toRefs, watch } from '@vue/composition-api';
+import { defineComponent, computed, ref, toRefs, watch } from 'vue';
 import { useCollectionsStore, useRelationsStore } from '@/stores/';
 import { getFieldsFromTemplate } from '@/utils/get-fields-from-template';
 import { unexpectedError } from '@/utils/unexpected-error';
@@ -387,6 +387,7 @@ export default defineComponent({
 .many-to-one-custom-dropdown {
 	position: relative;
 
+	/* stylelint-disable-next-line */
 	::v-deep .v-input .append {
 		display: flex;
 	}

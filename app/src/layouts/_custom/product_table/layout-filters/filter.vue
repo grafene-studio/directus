@@ -5,7 +5,7 @@
 </template>
 <script lang="ts">
 import { Field, Filter } from '@/types';
-import { computed, defineComponent, PropType } from '@vue/composition-api';
+import { computed, defineComponent, PropType } from 'vue';
 
 import FormField from '@/components/v-form/form-field.vue';
 
